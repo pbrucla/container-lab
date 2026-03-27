@@ -1,4 +1,14 @@
-Steps
+# Week 2 Activity: Creating your own Jail via the Command Line
+
+In this introductory activity, we want to showcase what you can do with regards to containerization, just via the command line! You will go part-way through commentin. 
+
+We hope that this activity will inspire you to work on coding a low-level container runtime (well, as far as we get) in C, which will take place over the rest of the quarter :)
+
+## Access to Development Server
+
+See [server-instructions.md](./server-instructions.md) for instructions on how to gain ssh access to the server. 
+
+We will create and enter a jail in your home directory. 
 
 ## Unsharing your User and Mount Namespace
 
@@ -78,3 +88,7 @@ ps aux
 ```
 
 the processes of the host will still show up! This is because we didn't unshare the PID namespace for this jail. 
+
+## Acknowledgements
+
+This activity was partially inspired (and expanded upon) by some of the challenges in [pwn.college](pwn.college)'s Sandboxing module in the System Security Dojo. 
