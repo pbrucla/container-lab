@@ -45,7 +45,7 @@ Read the manpage by running `man unshare`, or by [viewing an online version](htt
 If you run the `whoami` command afterwards, it should output `root`.
 If you run `readlink /proc/self/ns/*`, you should see that the `mnt` and `user` namespaces are different.
 
-> ![NOTE]
+> [!NOTE]
 > Technically, the flag for creating a new user namespace isn't needed, since the flag for mapping the root user implies it.
 
 Now, we can actually make the jail a mountpoint.
@@ -73,7 +73,7 @@ Change directory into `~/jail`.
 Pivot root into `.`, putting the old root in `./old`.
 If you run `ls -l`, you should only see the 6 directories in `~/jail`.
 
-> ![IMPORTANT]
+> [!IMPORTANT]
 > If `ls` throws an error about "command not found" or "error while loading shared libraries", run `export PATH=/bin:/sbin` and `export LD_LIBRARY_PATH=/lib64:/lib` to fix your environment.
 
 Now, we complete the pivot with a chroot to update the root directory, since some `pivot_root` implementations don't do so.
@@ -92,7 +92,7 @@ rmdir old
 If you run `ls /`, you should no longer see the `/old` directory.
 If you run `mount -l` to list every mount, the list of mounts should be very short, and there shouldn't be any mounts on `/old`.
 
-> ![NOTE]
+> [!NOTE]
 > The `-l` flag to `umount` is a *lazy unmount*: if the directory is in use, it'll simply hide it from the filesystem and complete the unmount once it's not in use anymore.
 
 This completes the making of the jail!
