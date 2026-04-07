@@ -94,6 +94,7 @@ If you run `mount -l` to list every mount, the list of mounts should be very sho
 
 > [!NOTE]
 > The `-l` flag to `umount` is a *lazy unmount*: if the directory is in use, it'll simply hide it from the filesystem and complete the unmount once it's not in use anymore.
+> This is because there are submounts in the root mount which will make an eager unmount fail.
 
 This completes the making of the jail!
 
@@ -102,7 +103,6 @@ This completes the making of the jail!
 If you run `ps aux`, you will be able to see the processes of the host.
 This is because we didn't unshare the PID namespace for this jail.
 There are many other namespaces we didn't unshare properly, like the network namespace, so there's a lot more to work on throughout this quarter!
-Additionally, the lazy unmount of the old mount is theoretically not needed and is a hacky workaround, so there should be a way to get it to work properly.
 
 ## Acknowledgements
 
