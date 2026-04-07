@@ -1,13 +1,13 @@
-# Containerization Lab
+# Container Lab
 
-This repo is used for the UCLA ACM Cyber's Containerization Lab for the Spring'26 quarter. 
+This repo is for UCLA ACM Cyber's Container Lab for Spring '26.
 
 Click on one of the links below to get started!
 
-| **Week** | **Topic** | **Slides** | **Lab / Instructions** |
+| **Week** | **Topic** | **Slides** | **Activity** |
 |----------|-----------|------------|---------|
-| Weel 2 | Intro to Containerization | [Slides (TODO)](TODO) | [Containerization from the Command Line](./week-2-activity.md)
-| Week 3 | -| - | - |
+| Week 2 | Intro to Containers | [Slides](https://docs.google.com/presentation/d/1zfe5k6gy-kW9bZgxDvhHzn8VAGRYCECecZ2LBJceM68/) | [Containers on the Command Line](./week-2-activity.md)
+| Week 3 | - | - | - |
 | Week 4 | - | - | - |
 | Week 5 | - | - | - |
 | Week 6 | - | - | - |
@@ -18,4 +18,4 @@ Click on one of the links below to get started!
 
 ## Acknowledgements
 
-The following members of ACM Cyber contributed to the development of this lab: Teong Seng Tan, Nathan Cheng and Jason An. 
+The following members of ACM Cyber contributed to the development of this lab: Teong Seng Tan, Nathan Cheng and Jason An.

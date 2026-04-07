@@ -1,22 +1,22 @@
 # Week 2 Activity: Creating your own Jail via the Command Line
 
-In this introductory activity, we want to showcase what you can do with regards to containerization, just via the command line!
-We hope that this activity will inspire you to work on coding a low-level container runtime (well, as far as we get) in C, which will take place over the rest of the quarter :)
+In this introductory activity, we want to showcase what you can do with containers, just via the command line!
+We hope that this activity will inspire you to work on a low-level container runtime (well, as far as we get) in C, which will take place over the rest of the quarter :)
 
 ## Access to Development Server
 
-See [server-instructions.md](./server-instructions.md) for instructions on how to gain ssh access to the server. 
+See [server-instructions.md](./server-instructions.md) for instructions on how to gain ssh access to the server.
 
 ## High-Level Overview
 Our goal for this activity will be to create a jail that only allows you to access files in `~/jail`.
 
 ## Creating and mounting the jail directory
-To create our jail, we first need to create the actual jail directory.
+To create our jail, we first need to create the root directory for the jail.
 
 **Action Item**: Create the empty directory `~/jail`.
 You'll know this succeeded if running the command `ls -l ~/jail` outputs `total 0`.
 
-Since we eventually want to use `~/jail` as our root mount, we have to make it a mountpoint.
+Since we eventually want to use `~/jail` as our root mount, we have to make it a *mountpoint* (recall that this is one of the requirements for `pivot_root`).
 This can be done by creating a *bind mount* from the jail onto itself.
 To do this, we use the command `mount --bind [SOURCE] [DESTINATION]`, where in this case both the source and destination are `~/jail`.
 
@@ -29,7 +29,7 @@ It turns out we need the `CAP_SYS_ADMIN` capability in the current namespace to 
 First, let's inspect our current namespaces using the `/proc` directory.
 The directory `/proc/self` will contain a lot of information about the current process, including its namespaces!
 
-**Action Item**: Run the command `ls -la /proc/self/ns`.
+**Action Item**: Run the command `ls -l /proc/self/ns`.
 You should see many different namespaces, such as `cgroup -> 'cgroup:[4026531835]'` (your exact namespace ID will likely differ).
 You can run the command `readlink /proc/self/ns/*` to get a cleaner output.
 Note the output of this command down for later (specifically the `user` and `mnt` namespaces), as we'll reference them again soon.
@@ -106,4 +106,4 @@ Additionally, the lazy unmount of the old mount is theoretically not needed and 
 
 ## Acknowledgements
 
-This activity was partially inspired (and expanded upon) by some of the challenges in [pwn.college](pwn.college)'s Sandboxing module in the System Security Dojo. 
+This activity was partially inspired (and expanded upon) by some of the challenges in [pwn.college](pwn.college)'s Sandboxing module in the System Security Dojo.
