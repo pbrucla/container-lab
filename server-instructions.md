@@ -18,7 +18,7 @@ We will use SSH keys to prove our identity to the server. If you already have SS
 
 To generate an SSH key, run `ssh-keygen -t ed25519` in a terminal (outside of WSL if you're on Windows). When prompted for the location where the key will be saved, choose the default by pressing Enter. Your keys will be stored in the `.ssh` folder of your home directory, which is hidden by default on macOS and Linux. 
 
-Your public key will be stored in a file named `id_ed25519.pub` and your private key will be in `id_ed25519`. Submit this [form](https://docs.google.com/forms/d/e/1FAIpQLSdVtqtiMw7SCQNT0RnXL6_nFFpwOru9NXmmRnc4TKemeEamfw/viewform?usp=dialog) with your **public** key so that we can give you access to the server. 
+Your public key will be stored in a file named `id_ed25519.pub` and your private key will be in `id_ed25519`. Submit this [form](https://forms.gle/XeuUofkibvpmj1ri6) with your **public** key so that we can give you access to the server. 
 
 The private key is used to prove that you own the public key and you should keep it secret. Once we tell you that your key has been added to the server, you should be able to connect by running 
 
@@ -28,7 +28,7 @@ ssh <username>@containerlab.acmcyber.com
 
 For example, if your username is `en0mem`, you would run `ssh en0mem@containerlab.acmcyber.com`.
 
-When you do this for the first time, you will be asked to verify the server's host key. Check that the displayed key fingerprint matches `SHA256:uU7Bln6gjDF48P2lKx3CZ7v87+XoyS9yeqqZV5DfO+U` and then type `yes`. If everything worked, you should see a green shell prompt that looks like `<username>@contlab:~$`.
+When you do this for the first time, you will be asked to verify the server's host key. Check that the displayed key fingerprint matches `SHA256:uU7Bln6gjDF48P2lKx3CZ7v87+XoyS9yeqqZV5DfO+U` and then type `yes`. If everything worked, you should see a green shell prompt that looks like `<username>@contlab:~$`. 
 
 Type `exit` to disconnect from the server.
 
