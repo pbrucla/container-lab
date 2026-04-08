@@ -10,11 +10,13 @@ See [server-instructions.md](./server-instructions.md) for instructions on how t
 ## High-Level Overview
 Our goal for this activity will be to create a jail that only allows you to access files in `~/jail`.
 
-## Creating and mounting the jail directory
+## Preparing the jail directory
 To create our jail, we first need to create the root directory for the jail.
 
 **Action Item**: Create the empty directory `~/jail`.
 You'll know this succeeded if running the command `ls -l ~/jail` outputs `total 0`.
+Then, populate the directory with a basic file structure by untaring the provided rootfs image `image.tar.gz` in `~/jail`.
+You should see a `bin` directory with binaries of core command-line utilities from [BusyBox](https://busybox.net), including the shell (`bin/sh`).
 
 Since we eventually want to use `~/jail` as our root mount, we have to make it a *mountpoint* (recall that this is one of the requirements for `pivot_root`).
 This can be done by creating a *bind mount* from the jail onto itself.
@@ -23,11 +25,11 @@ To do this, we use the command `mount --bind [SOURCE] [DESTINATION]`, where in t
 **Action Item**: Run the command `mount --bind ~/jail ~/jail`.
 You should see the error message `must be superuser to use mount`.
 
-## Making a new namespace
+## Making new namespaces
 We don't have permissions to mount directories!
 It turns out we need the `CAP_SYS_ADMIN` capability in the current namespace to be able to mount.
 First, let's inspect our current namespaces using the `/proc` directory.
-The directory `/proc/self` will contain a lot of information about the current process, including its namespaces!
+The directory `/proc/self` contains a lot of information about the current process, including its namespaces!
 
 **Action Item**: Run the command `ls -l /proc/self/ns`.
 You should see many different namespaces, such as `cgroup -> 'cgroup:[4026531835]'` (your exact namespace ID will likely differ).
@@ -39,62 +41,63 @@ Creating new namespaces can be done with the `unshare` command, which has a lot 
 Read the manpage by running `man unshare`, or by [viewing an online version](https://man7.org/linux/man-pages/man1/unshare.1.html), and find CLI flags to do the following:
 1. Create a new user namespace
 3. Create a new mount namespace
-2. Map the current user to the root user inside the user namespace
+2. Map the current user to the root user inside the new user namespace
 
 **Action Item**: Run the `unshare` command with the proper flags.
+It is highly recommended to pass `/bin/sh` to `unshare` as the program to run, because fancier shells are likely to cause confusing error messages after the `pivot_root` step (explained below).
 If you run the `whoami` command afterwards, it should output `root`.
-If you run `readlink /proc/self/ns/*`, you should see that the `mnt` and `user` namespaces are different.
+If you run `readlink /proc/self/ns/*`, you should see that the `mnt` and `user` namespace IDs are different from the values that you noted down before.
+
+Examine the `--propagation` flag of the `unshare` command. What is its default value and why does it matter?
 
 > [!NOTE]
 > Technically, the flag for creating a new user namespace isn't needed, since the flag for mapping the root user implies it.
 
-Now, we can actually make the jail a mountpoint.
+Now, we can actually make `~/jail` a mountpoint.
 
 **Action Item**: Run `mount --bind ~/jail ~/jail` again.
 There shouldn't be any error message this time.
-If you run `mount -l | grep jail` afterwards, you should see a mount on `/home/[USERNAME]/jail`.
 
-## Populating the jail
-We've got our jail directory, but it isn't usable yet!
-The shell (`/bin/sh`) is an executable, but it's not accessible from within `~/jail`, so if we switched into the jail now, we wouldn't be able to run anything.
-To ensure our jail is actually usable, we'll bind mount `/bin` (where the system's executables are stored) and `/lib` and `/lib64` (where the required libraries for the executables are stored) into the jail.
-
-**Action Item**: Make the directories `~/jail/bin`, `~/jail/sbin`, `~/jail/lib`, `~/jail/lib64`, and `~/jail/proc`.
-Then, bind mount `/bin`, `/sbin`, `/lib`, `/lib64`, and `/proc` into them.
-Note: For `~/jail/proc`, you should use the flag `--rbind` instead of `--bind` to recursively bind the submounts (simply using `--bind` should cause an error message anyways).
-If you run `mount -l | grep jail` afterwards, you should see all of the 6 bind mounts you've created (5 in this step and 1 from before).
+Let's look at the mounts in the current mount namespace, which we can get from the `/proc/self/mountinfo` file.
+If you run `grep jail /proc/self/mountinfo`, you should see a line with `/home/[USERNAME]/jail`.
+Note that each line in the file identifies a mount.
+The number in the first column is the mount ID and the second column is the ID of its parent mount.
+Find the parent mount of the mount on `/home/[USERNAME]/jail` using these two IDs.
 
 ## Pivoting into the jail
 We're now ready to pivot our root mount into the jail.
-To do this, we'll use the `pivot_root [NEW_ROOT] [PUT_OLD]` command.
+To do this, we'll use the `pivot_root [NEW_ROOT] [PUT_OLD]` command, which will change the root mount of the current mount namespace.
 
-**Action Item**: Make the `~/jail/old` directory.
-Change directory into `~/jail`.
+**Action Item**: Make the `~/jail/old` directory and change directory into `~/jail`.
 Pivot root into `.`, putting the old root in `./old`.
-If you run `ls -l`, you should only see the 6 directories in `~/jail`.
+If you run `ls -l`, you should only see the directories that are previously in `~/jail` (plus `old`).
 
 > [!IMPORTANT]
-> If `ls` throws an error about "command not found" or "error while loading shared libraries", run `export PATH=/bin:/sbin` and `export LD_LIBRARY_PATH=/lib64:/lib` to fix your environment.
-
-Now, we complete the pivot with a chroot to update the root directory, since some `pivot_root` implementations don't do so.
-
-**Action Item**: Run the command `exec chroot . sh` to replace your current shell with a chrooted one.
-If you run `ls /`, you should see the same 6 directories from before.
-
-## Unmount the old directory
-We are now ready to unmount the old root directory to complete the jail.
-
-**Action Item**: Run the commands:
-```
-umount -l /old
-rmdir old
-```
-If you run `ls /`, you should no longer see the `/old` directory.
-If you run `mount -l` to list every mount, the list of mounts should be very short, and there shouldn't be any mounts on `/old`.
+> If running `ls` after `pivot_root` causes a "command not found" error, run `export PATH=/bin` to fix your environment.
 
 > [!NOTE]
-> The `-l` flag to `umount` is a *lazy unmount*: if the directory is in use, it'll simply hide it from the filesystem and complete the unmount once it's not in use anymore.
-> This is because there are submounts in the root mount which will make an eager unmount fail.
+> The exact way that the `pivot_root` command works is a bit nuanced.
+> The `pivot_root` syscall changes the root mount of the calling process's mount namespace, which in this case is the `pivot_root` command.
+> Historically, there is no guarantee that the root directory of other running processes in the mount namespace is changed, so the root directory of the shell might not be updated after `pivot_root` exits, necessitating the use of `chroot` below.
+> The Linux implementation happens to update the root directory of other processes, and this behavior is now considered to be standardized.
+
+**Action Item**: Run the command `exec chroot . sh` to replace your current shell instance with the one from the rootfs image (BusyBox), and make sure that its root directory is set to the new root.
+If you run `ls /`, you should see the same directories from before, which means that we successfully restricted the accessible files in the jail by changing the root mount!
+
+## Unmounting the old directory
+We are now ready to unmount the old root directory to complete the jail.
+
+**Action Item**: Run the follwing commands to unmount the old root and remove the directory for it:
+```sh
+umount -l /old
+rmdir /old
+```
+If you run `ls /`, you should no longer see the `/old` directory.
+If you run `cat /proc/self/mountinfo` to list every mount, the list of mounts should be very short, and there shouldn't be any mounts on `/old`.
+
+> [!NOTE]
+> The `-l` flag to `umount` is a *lazy unmount*: if the mount is in use, it'll simply hide it from the filesystem and complete the unmount once it's not in use anymore.
+> This is needed because there are submounts in the root mount which will make an eager unmount fail.
 
 This completes the making of the jail!
 
