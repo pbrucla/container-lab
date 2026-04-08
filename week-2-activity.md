@@ -40,15 +40,19 @@ To work around our lack of privileges, we need to create a new *user namespace* 
 Creating new namespaces can be done with the `unshare` command, which has a lot of different CLI options.
 Read the manpage by running `man unshare`, or by [viewing an online version](https://man7.org/linux/man-pages/man1/unshare.1.html), and find CLI flags to do the following:
 1. Create a new user namespace
-3. Create a new mount namespace
-2. Map the current user to the root user inside the new user namespace
+2. Create a new mount namespace
+3. Create a new PID namespace
+4. Map the current user to the root user inside the new user namespace
 
 **Action Item**: Run the `unshare` command with the proper flags.
 It is highly recommended to pass `/bin/sh` to `unshare` as the program to run, because fancier shells are likely to cause confusing error messages after the `pivot_root` step (explained below).
+
+Hint: the `-f` (`--fork`) flag is needed for `unshare` to work properly.
+Try to run the command without `-f` and see what error you would encounter. Why does the error occur?
+Also, take a look at the `--propagation` flag of `unshare`. What is its default value and why does it matter?
+
 If you run the `whoami` command afterwards, it should output `root`.
 If you run `readlink /proc/self/ns/*`, you should see that the `mnt` and `user` namespace IDs are different from the values that you noted down before.
-
-Examine the `--propagation` flag of the `unshare` command. What is its default value and why does it matter?
 
 > [!NOTE]
 > Technically, the flag for creating a new user namespace isn't needed, since the flag for mapping the root user implies it.
@@ -84,10 +88,17 @@ If you run `ls -l`, you should only see the directories that are previously in `
 **Action Item**: Run the command `exec chroot . sh` to replace your current shell instance with the one from the rootfs image (BusyBox), and make sure that its root directory is set to the new root.
 If you run `ls /`, you should see the same directories from before, which means that we successfully restricted the accessible files in the jail by changing the root mount!
 
+Currently the `/proc` directory is empty, so we have to mount an instance of the `proc` filesystem (`procfs`) on `/proc` for various system utilities like `ps` to work.
+
+**Action Item**: Use the `mount` command with the appropriate flags to mount an instance of `procfs` on `/proc`.
+
+After mounting `/proc`, run the command `ps aux` to list all processes, and there should only be two processes shown: the shell (`sh`) and the `ps` program itself.
+This means that PIDs of processes outside of the jail's PID namespace are no longer visible :^)
+
 ## Unmounting the old directory
 We are now ready to unmount the old root directory to complete the jail.
 
-**Action Item**: Run the follwing commands to unmount the old root and remove the directory for it:
+**Action Item**: Run the following commands to unmount the old root and remove the directory for it:
 ```sh
 umount -l /old
 rmdir /old
@@ -100,12 +111,6 @@ If you run `cat /proc/self/mountinfo` to list every mount, the list of mounts sh
 > This is needed because there are submounts in the root mount which will make an eager unmount fail.
 
 This completes the making of the jail!
-
-## Realize that there is more work to be done!
-
-If you run `ps aux`, you will be able to see the processes of the host.
-This is because we didn't unshare the PID namespace for this jail.
-There are many other namespaces we didn't unshare properly, like the network namespace, so there's a lot more to work on throughout this quarter!
 
 ## Acknowledgements
 
