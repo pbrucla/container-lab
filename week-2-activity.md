@@ -45,11 +45,11 @@ Read the manpage by running `man unshare`, or by [viewing an online version](htt
 4. Map the current user to the root user inside the new user namespace
 
 **Action Item**: Run the `unshare` command with the proper flags.
-It is highly recommended to pass `/bin/sh` to `unshare` as the program to run, because fancier shells are likely to cause confusing error messages after the `pivot_root` step (explained below).
 
-Hint: the `-f` (`--fork`) flag is needed for `unshare` to work properly.
-Try to run the command without `-f` and see what error you would encounter. Why does the error occur?
-Also, take a look at the `--propagation` flag of `unshare`. What is its default value and why does it matter?
+> [!TIP]
+> The `-f` (`--fork`) flag is needed for `unshare` to work properly.
+> Try to run the command without `-f` and see what error you would encounter. Why does the error occur?
+> Also, take a look at the `--propagation` flag of `unshare`. What is its default value and why does it matter?
 
 If you run the `whoami` command afterwards, it should output `root`.
 If you run `readlink /proc/self/ns/*`, you should see that the `mnt` and `user` namespace IDs are different from the values that you noted down before.
