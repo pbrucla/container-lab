@@ -114,4 +114,4 @@ This completes the making of the jail!
 
 ## Acknowledgements
 
-This activity was partially inspired (and expanded upon) by some of the challenges in [pwn.college](pwn.college)'s Sandboxing module in the System Security Dojo.
+This activity was partially inspired (and expanded upon) by some of the challenges in [pwn.college](https://pwn.college)'s Sandboxing module in the System Security Dojo.
