@@ -65,12 +65,14 @@ There shouldn't be any error message this time.
 Let's look at the mounts in the current mount namespace, which we can get from the `/proc/self/mountinfo` file.
 If you run `grep jail /proc/self/mountinfo`, you should see a line with `/home/[USERNAME]/jail`.
 Note that each line in the file identifies a mount.
-The number in the first column is the mount ID and the second column is the ID of its parent mount.
-Find the parent mount of the mount on `/home/[USERNAME]/jail` using these two IDs.
+The number in the first column is the mount ID and the second column is the ID of its parent mount. 
+
+**Optional**: Find the parent mount of the mount on `/home/[USERNAME]/jail` using these two IDs.
 
 ## Pivoting into the jail
 We're now ready to pivot our root mount into the jail.
-To do this, we'll use the `pivot_root [NEW_ROOT] [PUT_OLD]` command, which will change the root mount of the current mount namespace.
+To do this, we'll use the `pivot_root [NEW_ROOT] [PUT_OLD]` command, which will change the root mount of the current mount namespace. 
+Note that `NEW_ROOT` and `PUT_OLD` are directory names.
 
 **Action Item**: Make the `~/jail/old` directory and change directory into `~/jail`.
 Pivot root into `.`, putting the old root in `./old`.

@@ -28,7 +28,7 @@ ssh <username>@containerlab.acmcyber.com
 
 For example, if your username is `en0mem`, you would run `ssh en0mem@containerlab.acmcyber.com`.
 
-When you do this for the first time, you will be asked to verify the server's host key. Check that the displayed key fingerprint matches `SHA256:dEAE3QKqgJ9dhO3GqMRmAl99O2YkMj2tdz6hvSdoic0` and then type `yes`. If everything worked, you should see a green shell prompt that looks like `<username>@contlab:~$`. 
+When you do this for the first time, you will be asked to verify the server's host key. Check that the displayed key fingerprint matches `SHA256:dEAE3QKqgJ9dhO3GqMRmAl99O2YkMj2tdz6hvSdoic0` and then type `yes`. If everything worked, you should see a green shell prompt that looks like `<username>@containerlab:~$`. 
 
 Type `exit` to disconnect from the server.
 
