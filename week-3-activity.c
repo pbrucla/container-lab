@@ -43,7 +43,7 @@ out:
 }
 
 int map_users(uid_t outside_uid, uid_t outside_gid) {
-    // write deny to setgroups
+    // disable setgroups
 
     // map outside_gid to itself
 
@@ -53,37 +53,35 @@ int map_users(uid_t outside_uid, uid_t outside_gid) {
 }
 
 int init_mounts(const char *jail_path) {
-    // make the root mount private
-    
+    // make the root mount private recursively
+
     // make the jail a mount point
-    
+
     // chdir into the jail
 
     // mount proc into jail
 
     // pivot root
-    
+
     // unmount old root by unmounting "."
-    
+
     // fully change into new root using chdir
-    
+
     return 0;
 }
 
 int create_jail(const char *jail_path) {
+    // get the effective uid and gid of the current process (the parent)
+    pid_t parent_uid = 0;
+    pid_t parent_gid = 0;
 
-    // get the uid and gid (of what will be the parent)
-    pid_t parent_uid;
-    pid_t parent_gid;
-
-    // use the clone3 syscall to fork a process that unshares its user, mount and pid namespaces
-    // (you will need to use the clone_args struct)
+    // set up arguments for clone3 to unshare user, mount and pid namespaces
     struct clone_args ca = {
         .flags = 0, // TODO
         .exit_signal = 0, // TODO
     };
 
-    // call clone3 using the struct and get the pid
+    // call clone3 with the above arguments
     pid_t pid = 0;
     if (pid < 0) {
         perror("clone3");
@@ -91,11 +89,10 @@ int create_jail(const char *jail_path) {
     }
 
     if (pid == 0) {
-
-        // This is the child
+        // this is the child
 
         // init mounts, and then map users
-        
+
         setenv("PATH", "/bin", 1);
 
         char *argv[] = {"/bin/sh", NULL};
@@ -104,11 +101,9 @@ int create_jail(const char *jail_path) {
             return 1;
         }
     } else {
-
-        // This is the parent
+        // this is the parent
 
         // wait for the child to exit using the waitpid function
-        
     }
 
     return 0;

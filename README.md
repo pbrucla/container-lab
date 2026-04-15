@@ -16,6 +16,11 @@ Click on one of the links below to get started!
 | Week 9 | - | - | - |
 | Week 10 | Present at Symposium | - | - |
 
+## Build instructions
+
+Run `make` to compile the activity for this week.
+The executables are located in the `build/` directory.
+
 ## Acknowledgements
 
 The following members of ACM Cyber contributed to the development of this lab: Teong Seng Tan, Nathan Cheng and Jason An.
