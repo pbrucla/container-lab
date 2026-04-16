@@ -7,7 +7,7 @@ Click on one of the links below to get started!
 | **Week** | **Topic** | **Slides** | **Activity** |
 |----------|-----------|------------|---------|
 | Week 2 | Intro to Containers | [Slides](https://docs.google.com/presentation/d/1zfe5k6gy-kW9bZgxDvhHzn8VAGRYCECecZ2LBJceM68/) | [Containers on the Command Line](./week-2-activity.md)
-| Week 3 | - | - | - |
+| Week 3 | Namespaces & Mounts in C | [Slides](https://docs.google.com/presentation/d/17_W81Jwzu78Crpt4v7G-yIqIwWRcLI_TYs0o27W8Ugk/edit?usp=sharing) | [Week 3 Activity](./week-3-activity.c) |
 | Week 4 | - | - | - |
 | Week 5 | - | - | - |
 | Week 6 | - | - | - |
