@@ -99,24 +99,25 @@ int init_mounts(const char *jail_path) {
 
 int get_cgroup_path(char **out) {
     // run DELEGATE_CGROUP_CMD as a child process using popen and
-    // read a line from its standard output
+    // read a line from its standard output, and store a pointer to it in the out variable
 
     return 0;
 }
 
 int init_cgroup_parent(const char *cgroup_path) {
     // 1. create 2 sub-cgroups under cgroup_path for the parent and the child
-    // 2. move outselves into the parent cgroup
+    // 2. move ourselves into the parent cgroup
 
     return 0;
 }
 
 int init_cgroup_child(const char *cgroup_path) {
-    // 1. move ourselves into the child cgroup
-    // 2. enable the pids, memory and cpu controllers
-    // 3. set the limits in each controller
-    // (see test-limits.c for the values that will be used to test your implementation)
-    // 4. enter a new cgroup namespace
+    // you will have to do the following 4 things, not necessarily in this order:
+    // 1. enter a new cgroup namespace
+    // 2. enable the necessary cgroup controllers (think: which file do you need to write to?)
+    // 3. set the necessary limits in each controller (look at the test-limits section of the activity README for what limits you need to set)
+    // 4. move ourselves into the child cgroup
+    // these need to be done in a specific order; think about what the order should be
 
     return 0;
 }
