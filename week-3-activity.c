@@ -72,8 +72,8 @@ int init_mounts(const char *jail_path) {
 
 int create_jail(const char *jail_path) {
     // get the effective uid and gid of the current process (the parent)
-    pid_t parent_uid = 0;
-    pid_t parent_gid = 0;
+    uid_t parent_uid = 0;
+    gid_t parent_gid = 0;
 
     // set up arguments for clone3 to unshare user, mount and pid namespaces
     struct clone_args ca = {
