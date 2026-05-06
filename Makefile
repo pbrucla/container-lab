@@ -1,8 +1,8 @@
-CFLAGS := -Wall -Wextra -pedantic -std=c99
+CFLAGS := -Wall -Wextra -pedantic -std=c11
 
 .PHONY: all clean
 
-all: build/week-4-activity
+all: build/week-6-activity
 
 build/%: %.c
 	[ -d build ] || mkdir build

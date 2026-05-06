@@ -10,7 +10,7 @@ Click on one of the links below to get started!
 | Week 3 | Namespaces and mounts | [Slides](https://docs.google.com/presentation/d/17_W81Jwzu78Crpt4v7G-yIqIwWRcLI_TYs0o27W8Ugk/) | [Skeleton code](./week-3-activity.c) |
 | Week 4 | cgroup | [Slides](https://docs.google.com/presentation/d/1etMZo-qicIcRFt984XGgCRkLjL8u1g6eaYvtCD8jI1Y/) | [Skeleton code](./week-4-activity.c) and [instructions](./week-4-activity.md) |
 | Week 5 | cgroup (continued) | - | - |
-| Week 6 | - | - | - |
+| Week 6 | Network namespaces | - | [Skeleton code](./week-6-activity.c) |
 | Week 7 | - | - | - |
 | Week 8 | - | - | - |
 | Week 9 | - | - | - |
