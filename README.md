@@ -11,9 +11,9 @@ Click on one of the links below to get started!
 | Week 4 | cgroup | [Slides](https://docs.google.com/presentation/d/1etMZo-qicIcRFt984XGgCRkLjL8u1g6eaYvtCD8jI1Y/) | [Skeleton code](./week-4-activity.c) and [instructions](./week-4-activity.md) |
 | Week 5 | cgroup (continued) | - | - |
 | Week 6 | Network namespaces | - | [Skeleton code](./week-6-activity.c) |
-| Week 7 | - | - | - |
+| Week 7 | Network namespaces (continued) | [Slides](https://docs.google.com/presentation/d/1S9TskPx_oWbPFIEkQkuTnIDbown-mJf_ja7znhxUkRk) | - |
 | Week 8 | - | - | - |
-| Week 9 | - | - | - |
+| Week 9 | Craft slides for symposium | - | - |
 | Week 10 | Present at Symposium | - | - |
 
 ## Build instructions
